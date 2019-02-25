@@ -43,10 +43,15 @@ namespace Sinco.Controllers
              IEnumerable<SelectListItem> person = db.Personas        
              .Select(persona => new SelectListItem { Value = persona.codigo.ToString(), Text = persona.nombre });
             ViewBag.personaList = person;
-
+            var model = new PedidoDescrip();
+            model.fecha = DateTime.Parse(DateTime.Now.ToShortDateString());
             // ViewBag.personList = new System.Web.Mvc.SelectList(db.Personas.ToList(), "codigo", "nombre");
 
-            return View();
+            IEnumerable<SelectListItem> arti = db.Articulos
+             .Select(articulos => new SelectListItem { Value = articulos.nombre.ToString(), Text = articulos.nombre });
+            ViewBag.articuloList = arti;
+
+            return View(model);
         }
 
         // POST: PedidoDescrips/Create
@@ -54,11 +59,11 @@ namespace Sinco.Controllers
         // más información vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "id,idUsuario,fecha,concepto")] PedidoDescrip pedidoDescrip )
+        public ActionResult Create(PedidoDescrip pedidoDescrip,String personaList)
         {
             if (ModelState.IsValid)
             {
-              //  pedidoDescrip.idUsuario = Int32.Parse(personaList);
+               pedidoDescrip.idUsuario = Int32.Parse(personaList);
                 db.Pedidos.Add(pedidoDescrip);               
                                              
 

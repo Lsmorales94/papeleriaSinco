@@ -1,4 +1,5 @@
-﻿@model Sinco.Models.PedidoDescrip
+﻿@using Sinco.Models
+@model Sinco.Models.PedidoDescrip
 
 @{
     ViewBag.Title = "Create";
@@ -7,45 +8,71 @@
 <h2>Create</h2>
 
 
-@using (Html.BeginForm()) 
+@using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
     
-    <div class="form-horizontal">
-        <h4>PedidoDescrip</h4>
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+<div class="form-horizontal">
+    <h4>PedidoDescrip</h4>
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="form-group">
+        @Html.LabelFor(model => model.idUsuario, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="form-group">
-            @Html.LabelFor(model => model.idUsuario, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="form-group">
 
-                @Html.DropDownList("personaList", ViewBag.personList as SelectList, "seleccione un usuario")
+            @Html.DropDownList("personaList", ViewBag.personaList as SelectList, "seleccione un usuario")
 
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.fecha, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.fecha, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.fecha, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.concepto, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.concepto, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.concepto, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
-            </div>
         </div>
     </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.fecha, htmlAttributes: new { @class = "control-label col-md-2"  })
+        <div class="col-md-10">
+            @Html.TextBoxFor(model => model.fecha, "{0:dd/MM/yyyy}", new { @class = "form-control", autocomplete="off" })
+           @* @Html.EditorFor(model => model.fecha, new { htmlAttributes = new { @class = "form-control" } })*@
+            @Html.ValidationMessageFor(model => model.fecha, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.concepto, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.concepto, new { htmlAttributes = new { @class = "form-control", autocomplete = "off" } })
+            @Html.ValidationMessageFor(model => model.concepto, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>articulo</th>
+                <th>cantidad</th>
+                <th>importado</th>
+            </tr>
+        </thead>
+        <tbody id="tbitems"></tbody>
+
+        @*<tfoot>
+                <tr>
+                    <td>
+                        <input class="btnAdd btn btn-default" type="button" name="name" value="Add" />
+                        <input id="btnAddBook" type="button" onclick="addRow();" value="Add Book" />
+                    </td>
+                </tr>
+            </tfoot>*@
+    </table>
+    <div class="form-group">
+        @Html.DropDownList("articuloList", ViewBag.articuloList as SelectList)
+        <input type="number" id="acantidad" />
+        <input type="checkbox" id="aimportado">
+        <p> <input class="btnAdd btn btn-default" type="button" name="name" value="Add" /></p>
+    </div>
+   
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Create" class="btn btn-default" />
+        </div>
+    </div>
+</div>
 }
 
 <div>
@@ -54,4 +81,39 @@
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+    <script language="javascript" type="text/javascript">
+        @*$(".btnAdd").click(function () {
+            @{ Model.PedidoDetalle.Add(new PedidoDetalle());}
+            var td1 = '<td>@Html.EditorFor(modelItem => modelItem.PedidoDetalle.idArticulo, new { htmlAttributes = new { @class = "form-control" } })</td>';
+            var td2 = '<td>@Html.EditorFor(modelItem => modelItem.PedidoDetalle.cantidad, new { htmlAttributes = new { @class = "form-control" } })</td>';
+            $("tbody").append('<tr>' + td1 + td2 + '</tr>');
+        });*@
+        $(".btnAdd").click(function () {
+            console.log("adsa");
+            @{
+                Model.detallePedido.Add(new PedidoDetalle());
+            }
+            var valorarticulo = document.getElementById("articuloList").value;
+            var valorcantidad= document.getElementById("acantidad").value;
+            var valorimportado = document.getElementById("aimportado").value;
+
+            var index = $("#tbitems").children("tr").length;
+            var indexCell = "<td style='display:none'><input name='detallePedido.Index' type='hidden'  value='" + index + "' /></td>";
+            var articuloCell = "<td><input id='detallePedido_" + index + "__Title' name='detallePedido[" + index + "].Articulo' type='text' value= '"+valorarticulo+"' readonly /></td>";
+            var cantidadCell = "<td><input id='detallePedido_" + index + "__Title'  name='detallePedido[" + index + "].cantidad' type='text' value='"+valorcantidad+"' readonly/></td>";
+            //var importacionCell = "<td><input id='detallePedido_" + index + "__Title'  name='detallePedido[" + index + "].importado type='checkbox' value='"+valorimportado+"' readonly/></td>";
+            var removeCell = "<td><input id='btnAddBook' type='button' value='Remove' onclick='removeRow(" + index + ");'readonly /></td>";
+
+            var newRow = "<tr id='trdetallePedido" + index + "'>" +
+                indexCell + articuloCell + cantidadCell + removeCell + "</tr>";
+            $("#tbitems").append(newRow);
+            
+        });
+
+        function removeRow(id) {
+            var controlToBeRemoved = "#trdetallePedido" + id;
+            $(controlToBeRemoved).remove();
+        }
+
+    </script>
 }

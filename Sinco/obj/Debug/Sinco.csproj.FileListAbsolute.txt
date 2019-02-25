@@ -124,3 +124,6 @@ C:\Users\MORALES\source\repos\Sinco\Sinco\obj\Debug\Sinco.csproj.GenerateResourc
 C:\Users\MORALES\source\repos\Sinco\Sinco\obj\Debug\Sinco.Migrations.artiMig.resources
 C:\Users\MORALES\source\repos\Sinco\Sinco\obj\Debug\Sinco.Migrations.pedido.resources
 C:\Users\MORALES\source\repos\Sinco\Sinco\obj\Debug\Sinco.Migrations.pedidoDetalles.resources
+C:\Users\MORALES\source\repos\Sinco\Sinco\obj\Debug\Sinco.Migrations.campoidpedido.resources
+C:\Users\MORALES\source\repos\Sinco\Sinco\obj\Debug\Sinco.Migrations.articuloTipo.resources
+C:\Users\MORALES\source\repos\Sinco\Sinco\obj\Debug\Sinco.Migrations.formatFecha.resources

@@ -10,8 +10,7 @@ namespace Sinco.Models
     {
         [Key]
         public int id { set; get; }
-        public int idPedido { set; get; }
-        public int idArticulo { set; get; }
+        public string Articulo { set; get; }
         public int cantidad { set; get; }
         public bool importado { set; get; }
 
